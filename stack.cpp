@@ -1,5 +1,5 @@
 #include <iostream>
-
+//this is a stack
 using namespace std;
 class stack
 {
