@@ -93,25 +93,112 @@ void preorder(node *root)
 		preorder(root->right);
 	}
 }
+void inorder(node *root)
+{
+	if(root!=NULL)
+	{
+		inorder(root->left);
+		cout << root->data << " ";
+		inorder(root->right);
+	}
+}
+void postorder(node *root)
+{
+	if(root!=NULL)
+	{
+		postorder(root->left);
+		postorder(root->right);
+		cout << root->data << " ";
+	}	
+}
+node* minnode(node *giv)
+{
+	node* temp =  giv;
+	while(temp ->left != NULL)
+	{
+		temp = temp -> left;
+	}
+	return temp;
+}
+node* deletenode(node* root,int data)
+{
+	if(root == NULL)
+		return root;
+	if(data < root-> data)
+		root->left = deletenode(root->left,data);
+	else if(data > root->data)
+		root->right = deletenode(root->right,data);
+	else
+	{
+		 if((root->left == NULL) || (root->right == NULL) )
+        {  
+            node *temp;
+            if(root->left == NULL)
+            	temp = root->right;
+            else
+            	temp = root->left;
+            if (temp == NULL)  
+            {  
+                temp = root;  
+                root = NULL;  
+            }  
+            else  
+            	*root = *temp; 
+            free(temp);  
+		}
+		 else
+        {
+        	node* temp = minnode(root->right);
+        	root->data = temp->data;
+        	root->right = deletenode(root->right,temp->data);
+        }        
+	}
+	if(root == NULL)
+		return root;
+	root->height = 1+ max(height(root->left),height(root->right));
+	int balance = getbalance(root);
+    if (balance > 1 && getbalance(root->left) >= 0)  
+    	return rightrotate(root);    
+    if (balance > 1 && getbalance(root->left) < 0)  
+    {  
+        root->left = leftrotate(root->left);  
+        return rightrotate(root);  
+    }    
+    if (balance < -1 &&  getbalance(root->right) <= 0)  
+        return leftrotate(root);  
+    if (balance < -1 &&  getbalance(root->right) > 0)  
+    {  
+        root->right = rightrotate(root->right);  
+        return leftrotate(root);  
+    }  
+    return root;
+}
 int main()
 {
 	node *root = NULL;
 	while(1)
 	{
-		cout << "enter 1 to insert 2 to traverse"<< endl;
+		cout << "enter 1 to insert 2 to delete other for traversal"<< endl;
 		int a;
 		cin >> a;
 		if(a == 1)
 		{
-			cout << "enter the element you want to insert -" << endl;
+			cout << "enter the element you want to insert - " << endl;
 			int g;
 			cin >> g;
 			root = insert(root,g);
 		}
-		else
+		if(a == 2)
 		{
-			preorder(root);
-			cout << endl;
+			cout << "enter the element you want to delete - " << endl;
+			int b;
+			cin >> b;
+			root = deletenode(root,b);
 		}
+		cout << endl << endl;
+			cout << "preorder-> " ;preorder(root) ;cout << endl;
+			cout << "inorder-> " ;inorder(root);cout  << endl;
+			cout << "postorder-> ";postorder(root);cout  << endl;
+		cout << endl << endl;
 	}
 }
