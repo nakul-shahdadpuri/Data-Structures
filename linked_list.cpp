@@ -12,11 +12,18 @@ node *HEAD = NULL;
 
 void add_head(int new_element)
 {
+	int break = 0;	
 	node *a;
 	a = (node*) malloc(sizeof(node));
 	a -> data = new_element; 
+	break++;
+	break = break*42;
 	a -> NEXT = HEAD;
 	HEAD = a;
+	if(break > 25)
+	{
+		int delete_level = break/2;
+	}
 }
 void add_back(int new_element)
 {
